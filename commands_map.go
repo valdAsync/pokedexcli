@@ -3,19 +3,13 @@ package main
 import "fmt"
 
 func commandMap(c *config) error {
-	url := "https://pokeapi.co/api/v2/location-area/"
-
-	if c.Next != nil && len(*c.Next) > 0 {
-		url = *c.Next
-	}
-
-	locationAreas, err := getLocationAreas(url)
+	locationAreas, err := c.pokeapiClient.ListLocationAreas(c.nextLocationURL)
 	if err != nil {
 		return err
 	}
 
-	c.Next = &locationAreas.Next
-	c.Previous = locationAreas.Previous
+	c.nextLocationURL = locationAreas.Next
+	c.prevLocationURL = locationAreas.Previous
 
 	for _, location := range locationAreas.Results {
 		fmt.Println(location.Name)
@@ -25,18 +19,18 @@ func commandMap(c *config) error {
 }
 
 func commandMapB(c *config) error {
-	if c.Previous == nil || len(*c.Previous) == 0 {
+	if c.nextLocationURL == nil || len(*c.prevLocationURL) == 0 {
 		fmt.Println("you're on the first page")
 		return nil
 	}
 
-	locationAreas, err := getLocationAreas(*c.Previous)
+	locationAreas, err := c.pokeapiClient.ListLocationAreas(c.nextLocationURL)
 	if err != nil {
 		return err
 	}
 
-	c.Next = &locationAreas.Next
-	c.Previous = locationAreas.Previous
+	c.nextLocationURL = locationAreas.Next
+	c.prevLocationURL = locationAreas.Previous
 
 	for _, location := range locationAreas.Results {
 		fmt.Println(location.Name)

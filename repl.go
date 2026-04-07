@@ -5,11 +5,18 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/valdAsync/pokedexcli/internal/pokeapi"
 )
 
-func startRepl() {
+type config struct {
+	pokeapiClient   pokeapi.Client
+	nextLocationURL *string
+	prevLocationURL *string
+}
+
+func startRepl(cfg *config) {
 	reader := bufio.NewScanner(os.Stdin)
-	cfg := &config{}
 	for {
 		fmt.Print("Pokedex > ")
 		reader.Scan()
@@ -45,11 +52,6 @@ type cliCommand struct {
 	name        string
 	description string
 	callback    func(*config) error
-}
-
-type config struct {
-	Next     *string
-	Previous *string
 }
 
 func getCommands() map[string]cliCommand {

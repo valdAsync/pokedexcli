@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-func commandMap(c *config) error {
+func commandMap(c *config, arg ...string) error {
 	locationAreas, err := c.pokeapiClient.ListLocationAreas(c.nextLocationURL)
 	if err != nil {
 		return err
@@ -18,7 +18,7 @@ func commandMap(c *config) error {
 	return nil
 }
 
-func commandMapB(c *config) error {
+func commandMapB(c *config, arg ...string) error {
 	if c.prevLocationURL == nil {
 		fmt.Println("you're on the first page")
 		return nil

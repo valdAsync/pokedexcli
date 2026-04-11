@@ -19,12 +19,12 @@ func commandMap(c *config) error {
 }
 
 func commandMapB(c *config) error {
-	if c.nextLocationURL == nil || len(*c.prevLocationURL) == 0 {
+	if c.prevLocationURL == nil {
 		fmt.Println("you're on the first page")
 		return nil
 	}
 
-	locationAreas, err := c.pokeapiClient.ListLocationAreas(c.nextLocationURL)
+	locationAreas, err := c.pokeapiClient.ListLocationAreas(c.prevLocationURL)
 	if err != nil {
 		return err
 	}
@@ -38,4 +38,3 @@ func commandMapB(c *config) error {
 
 	return nil
 }
-
